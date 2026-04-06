@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code — Полевое руководство</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e0f;
+    --bg2: #161618;
+    --bg3: #1e1e21;
+    --bg4: #252528;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #e8e6e0;
+    --text2: #9b9891;
+    --text3: #5c5a56;
+    --accent: #c8a96e;
+    --accent2: #8b6f3e;
+    --purple: #9b8fd4;
+    --purple-bg: rgba(155,143,212,0.1);
+    --teal: #5daa8f;
+    --teal-bg: rgba(93,170,143,0.1);
+    --amber: #c8943a;
+    --amber-bg: rgba(200,148,58,0.1);
+    --coral: #c87a5d;
+    --coral-bg: rgba(200,122,93,0.1);
+    --green: #7ab06a;
+    --green-bg: rgba(122,176,106,0.1);
+    --red: #c86060;
+    --red-bg: rgba(200,96,96,0.1);
+    --font-serif: 'Instrument Serif', Georgia, serif;
+    --font-mono: 'DM Mono', monospace;
+    --font-sans: 'Manrope', sans-serif;
+    --r: 10px;
+    --r-sm: 6px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(14,14,15,0.92);
+    backdrop-filter: blur(12px);
+  }
+  .logo {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .header-badge {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  nav {
+    display: flex;
+    gap: 4px;
+  }
+  nav a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: var(--r-sm);
+    transition: all 0.15s;
+  }
+  nav a:hover { color: var(--text); background: var(--bg3); }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 72px 32px 56px;
+    max-width: 860px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: var(--font-serif);
+    font-size: clamp(36px, 6vw, 58px);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero p {
+    font-size: 16px;
+    color: var(--text2);
+    max-width: 560px;
+    margin: 0 auto 32px;
+    line-height: 1.7;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--font-serif);
+    font-size: 28px;
+    color: var(--text);
+    display: block;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--text3);
+    font-weight: 500;
+  }
+
+  /* ── LAYOUT ── */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px 80px;
+  }
+
+  .section {
+    margin-bottom: 64px;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .section-count {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text3);
+  }
+
+  /* ── CARDS GRID ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  .cards-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 12px;
+  }
+
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.15s;
+    cursor: pointer;
+  }
+  .card:hover {
+    border-color: var(--border2);
+    transform: translateY(-1px);
+  }
+  .card-head {
+    padding: 16px 18px 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .card-badge {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 99px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .badge-purple { background: var(--purple-bg); color: var(--purple); }
+  .badge-teal   { background: var(--teal-bg);   color: var(--teal);   }
+  .badge-amber  { background: var(--amber-bg);  color: var(--amber);  }
+  .badge-coral  { background: var(--coral-bg);  color: var(--coral);  }
+  .badge-green  { background: var(--green-bg);  color: var(--green);  }
+  .badge-red    { background: var(--red-bg);    color: var(--red);    }
+
+  .card-body {
+    padding: 12px 18px 18px;
+  }
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .card-desc {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  /* expandable detail */
+  .card-detail {
+    display: none;
+    padding: 0 18px 18px;
+    border-top: 1px solid var(--border);
+    margin-top: 0;
+  }
+  .card-detail.open { display: block; }
+  .card-detail-inner {
+    padding-top: 14px;
+  }
+  .card-detail p {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+  .card-detail p:last-child { margin-bottom: 0; }
+  .card-detail strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .toggle-icon {
+    font-size: 16px;
+    color: var(--text3);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    user-select: none;
+    margin-top: 2px;
+  }
+  .card.expanded .toggle-icon { transform: rotate(45deg); }
+
+  /* ── CODE BLOCKS ── */
+  .code-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    padding: 14px 16px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: #c9b89a;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 10px 0;
+    position: relative;
+  }
+  .code-copy {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 10px;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text3);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .code-copy:hover { color: var(--text); border-color: var(--border2); }
+  .ck { color: var(--purple); }
+  .cv { color: var(--teal); }
+  .cm { color: var(--text3); }
+  .cw { color: var(--amber); }
+
+  /* ── PROMPT TEMPLATES ── */
+  .prompt-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .prompt-card-head {
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .prompt-card-head:hover { background: var(--bg3); }
+  .prompt-card-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .prompt-card-sub {
+    font-size: 12px;
+    color: var(--text3);
+    margin-top: 2px;
+  }
+  .prompt-body {
+    display: none;
+    padding: 0 18px 18px;
+    border-top: 1px solid var(--border);
+  }
+  .prompt-body.open { display: block; }
+
+  /* ── TIPS GRID ── */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+  }
+  .tip {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .tip-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .tip-text {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.55;
+  }
+  .tip-text strong { color: var(--text); }
+
+  /* ── WORKFLOW STEPS ── */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 14px 18px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    transition: border-color 0.15s;
+  }
+  .step:hover { border-color: var(--border2); }
+  .step-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text3);
+    background: var(--bg3);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-content {}
+  .step-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+  .step-desc {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.55;
+  }
+
+  /* ── CLAUDE.MD ANATOMY ── */
+  .anatomy-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .anatomy-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 12px 14px;
+  }
+  .anatomy-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .must-badge {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 1px 5px;
+    border-radius: 99px;
+    background: var(--coral-bg);
+    color: var(--coral);
+  }
+  .opt-badge {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 1px 5px;
+    border-radius: 99px;
+    background: var(--teal-bg);
+    color: var(--teal);
+  }
+  .anatomy-desc {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  /* ── CROSS-MODEL FLOW ── */
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .flow-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 10px 16px;
+    text-align: center;
+    flex: 1;
+    min-width: 80px;
+  }
+  .flow-box.f-claude { border-color: rgba(155,143,212,0.3); background: rgba(155,143,212,0.05); }
+  .flow-box.f-codex  { border-color: rgba(93,170,143,0.3);  background: rgba(93,170,143,0.05);  }
+  .flow-box-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .flow-box.f-claude .flow-box-title { color: var(--purple); }
+  .flow-box.f-codex  .flow-box-title { color: var(--teal); }
+  .flow-box-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .flow-arr { color: var(--text3); font-size: 14px; flex-shrink: 0; }
+
+  /* ── HABITS ── */
+  .habits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+  }
+  .habit {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 16px;
+  }
+  .habit-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .habit-body {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+  .habit-body code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    color: var(--teal);
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 48px 0;
+  }
+
+  /* ── INLINE NOTE ── */
+  .inline-note {
+    background: rgba(200,169,110,0.07);
+    border: 1px solid rgba(200,169,110,0.2);
+    border-radius: var(--r);
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .inline-note strong { color: var(--accent); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px;
+    text-align: center;
+    color: var(--text3);
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  footer a { color: var(--text2); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .site-header { padding: 0 16px; }
+    nav { display: none; }
+    .hero { padding: 48px 16px 40px; }
+    .main { padding: 0 16px 60px; }
+    .flow-row { flex-direction: column; }
+    .flow-arr { transform: rotate(90deg); align-self: center; }
+  }
+
+  /* ── ANCHOR OFFSET ── */
+  [id] { scroll-margin-top: 72px; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero { animation: fadeUp 0.5s ease both; }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="site-header">
+  <div class="logo">
+    <div class="logo-dot"></div>
+    Claude Code — Полевое руководство
+  </div>
+  <nav>
+    <a href="#modes">Режимы</a>
+    <a href="#files">Файлы</a>
+    <a href="#claude-md">CLAUDE.md</a>
+    <a href="#agents">Агенты</a>
+    <a href="#prompts">Промпты</a>
+    <a href="#cross">Cross-model</a>
+    <a href="#habits">Привычки</a>
+  </nav>
+  <span class="header-badge">claude-code-best-practice</span>
+</header>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-eyebrow">Справочник по лучшим практикам</div>
+  <h1>Как на самом деле<br>работать с <em>Claude Code</em></h1>
+  <p>Всё что нужно знать: режимы, шаблоны промптов, CLAUDE.md, агенты, cross-model review — в одном месте.</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">22K+</span><span class="stat-label">звёзд на GitHub</span></div>
+    <div class="stat"><span class="stat-num">7</span><span class="stat-label">разделов</span></div>
+    <div class="stat"><span class="stat-num">15+</span><span class="stat-label">готовых промптов</span></div>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<main class="main">
+
+  <!-- ══ РЕЖИМЫ И КОМАНДЫ ══ -->
+  <section class="section" id="modes">
+    <div class="section-header">
+      <h2 class="section-title">Режимы и команды</h2>
+      <span class="section-count">3 концепции</span>
+    </div>
+
+    <div class="cards-grid">
+
+      <!-- PLAN MODE -->
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-head">
+          <span class="card-badge badge-purple">режим</span>
+          <span class="toggle-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Plan mode</div>
+          <div class="card-desc">Claude сначала думает и составляет план — потом делает.</div>
+        </div>
+        <div class="card-detail">
+          <div class="card-detail-inner">
+            <p>Перед тем как Claude начнёт писать код, он составляет подробный план. Ты видишь шаги заранее, можешь их поправить, и только потом Claude идёт в работу.</p>
+            <p><strong>Ключевой трюк:</strong> дай Claude способ проверить результат. Тест, команда, URL. Без этого он будет угадывать «готово».</p>
+            <div class="code-block"><button class="code-copy" onclick="copyCode(this)">copy</button>Think step by step. Write a plan first,
+then implement. Include how to verify
+each step. Wait for my approval.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- /loop -->
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-head">
+          <span class="card-badge badge-purple">паттерн</span>
+          <span class="toggle-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">/loop — итеративные задачи</div>
+          <div class="card-desc">Повторяющиеся задачи: файл за файлом, тест за тестом.</div>
+        </div>
+        <div class="card-detail">
+          <div class="card-detail-inner">
+            <p><strong>Важно:</strong> /loop — не встроенная команда. Это паттерн, который ты описываешь в промпте или CLAUDE.md.</p>
+            <p>Суть: Claude делает одну единицу работы → проверяет → повторяет. Останавливается когда тест упал или задача завершена.</p>
+            <div class="code-block"><button class="code-copy" onclick="copyCode(this)">copy</button>Work through this iteratively.
+For each file:
+1. Make the change
+2. Run: npm test
+3. If passes — next file
+4. If fails — STOP and report
+
+Never continue after a failure.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- /btw -->
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-head">
+          <span class="card-badge badge-purple">команда</span>
+          <span class="toggle-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">/btw — побочный вопрос</div>
+          <div class="card-desc">Задать вопрос пока Claude работает, не прерывая основную задачу.</div>
+        </div>
+        <div class="card-detail">
+          <div class="card-detail-inner">
+            <p>Пока Claude реализует что-то большое, можно «в сторону» спросить уточняющий вопрос. Claude ответит и продолжит работу.</p>
+            <p>Это как сказать коллеге «кстати...» не останавливая его от основной работы.</p>
+            <div class="code-block"><button class="code-copy" onclick="copyCode(this)">copy</button>/btw What naming convention
+should I use for these utils?</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ ФАЙЛЫ И СТРУКТУРА ══ -->
+  <section class="section" id="files">
+    <div class="section-header">
+      <h2 class="section-title">Файлы и структура</h2>
+      <span class="section-count">3 инструмента</span>
+    </div>
+
+    <div class="cards-grid">
+
+      <!-- Git Worktrees -->
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-head">
+          <span class="card-badge badge-teal">git</span>
+          <span class="toggle-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Git Worktrees</div>
+          <div class="card-desc">Параллельная работа в нескольких ветках одновременно.</div>
+        </div>
+        <div class="card-detail">
+          <div class="card-detail-inner">
+            <p>Один репозиторий — несколько папок на разных ветках. Запусти Claude Code в двух окнах: один над фичей A, второй над фичей B.</p>
+            <div class="code-block"><button class="code-copy" onclick="copyCode(this)">copy</button># Создать новый worktree
+git worktree add ../myapp-feature-b feature-b
+
+# Открой в Claude Code
+cd ../myapp-feature-b</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Этапы + гейты -->
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-head">
+          <span class="card-badge badge-teal">практика</span>
+          <span class="toggle-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Этапы + гейты</div>
+          <div class="card-desc">Тест-чекпоинты между этапами. Не иди дальше пока не прошёл.</div>
+        </div>
+        <div class="card-detail">
+          <div class="card-detail-inner">
+            <p>Разбей задачу на фазы и добавь обязательную проверку (гейт) после каждой. Claude не переходит к следующей фазе пока гейт не пройден.</p>
+            <div class="code-block"><button class="code-copy" onclick="copyCode(this)">copy</button>Phase 1: Create database schema
+Gate: run npm run db:validate — must pass
+
+Phase 2: Build API endpoints
+Gate: run npm test api — all green
+
+Phase 3: Connect frontend
+Gate: manually test login flow</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Code Review -->
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-head">
+          <span class="card-badge badge-teal">ревью</span>
+          <span class="toggle-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Code Review в новом контексте</div>
+          <div class="card-desc">Свежий чат находит баги которые пропустил исходный агент.</div>
+        </div>
+        <div class="card-detail">
+          <div class="card-detail-inner">
+            <p>Когда Claude долго работал над кодом — он «замыливается». Открой новый чат, вставь код и попроси ревью. Свежий контекст = другой взгляд.</p>
+            <div class="code-block"><button class="code-copy" onclick="copyCode(this)">copy</button>Review this code for bugs and edge cases.
+You have no context about how it was written.
+Be critical. Format: CRITICAL / IMPORTANT / MINOR</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ CLAUDE.MD ══ -->
+  <section class="section" id="claude-md">
+    <div class="section-header">
+      <h2 class="section-title">CLAUDE.md</h2>
+      <span class="section-count">Инструкция для Claude по проекту</span>
+    </div>
+
+    <div class="inline-note">
+      <strong>Лимит: 200 строк на файл.</strong> Больше — Claude начинает игнорировать содержимое. Пиши по факту проблем, не заранее. Claude читает CLAUDE.md из текущей папки и всех родительских.
+    </div>
+
+    <div class="anatomy-row">
+      <div class="anatomy-item">
+        <div class="anatomy-label">Project <span class="must-badge">обязательно</span></div>
+        <div class="anatomy-desc">Одна строка: что за проект, стек. Claude читает это первым.</div>
+      </div>
+      <div class="anatomy-item">
+        <div class="anatomy-label">Setup <span class="must-badge">обязательно</span></div>
+        <div class="anatomy-desc">Как установить зависимости и запустить проект.</div>
+      </div>
+      <div class="anatomy-item">
+        <div class="anatomy-label">Testing <span class="must-badge">обязательно</span></div>
+        <div class="anatomy-desc">Команда для запуска тестов. Без этого Claude не проверит работу.</div>
+      </div>
+      <div class="anatomy-item">
+        <div class="anatomy-label">Architecture <span class="must-badge">обязательно</span></div>
+        <div class="anatomy-desc">Где что лежит. API, компоненты, конфиги.</div>
+      </div>
+      <div class="anatomy-item">
+        <div class="anatomy-label">Code style <span class="opt-badge">полезно</span></div>
+        <div class="anatomy-desc">Только то что отличается от общепринятого. TypeScript strict? no any?</div>
+      </div>
+      <div class="anatomy-item">
+        <div class="anatomy-label">Do not <span class="opt-badge">полезно</span></div>
+        <div class="anatomy-desc">Явные запреты с альтернативами. «Не X — используй Y».</div>
+      </div>
+      <div class="anatomy-item">
+        <div class="anatomy-label">Commands <span class="opt-badge">по желанию</span></div>
+        <div class="anatomy-desc">Пользовательские команды: /loop, /review и т.д.</div>
+      </div>
+      <div class="anatomy-item">
+        <div class="anatomy-label">When stuck <span class="opt-badge">полезно</span></div>
+        <div class="anatomy-desc">Когда остановиться и спросить. Предотвращает тихий рефакторинг.</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+
+      <!-- Минимальный -->
+      <div class="prompt-card">
+        <div class="prompt-card-head" onclick="togglePrompt(this)">
+          <div>
+            <div class="prompt-card-label">Минимальный шаблон</div>
+            <div class="prompt-card-sub">~30 строк — достаточно для большинства проектов</div>
+          </div>
+          <span class="toggle-icon" style="font-size:16px;color:var(--text3);transition:transform 0.2s">+</span>
+        </div>
+        <div class="prompt-body">
+          <div class="code-block" style="margin-top:14px"><button class="code-copy" onclick="copyCode(this)">copy</button><span class="cm"># [Название проекта]</span>
+
+<span class="ck">## Project</span>
+<span class="cv">Next.js 14</span> + TypeScript. E-commerce platform.
+
+<span class="ck">## Setup</span>
+npm install
+npm run dev        <span class="cm"># localhost:3000</span>
+
+<span class="ck">## Testing</span>
+npm test           <span class="cm"># run after every change</span>
+npm run typecheck  <span class="cm"># npx tsc --noEmit</span>
+
+<span class="ck">## Architecture</span>
+/src/app           <span class="cm"># Next.js pages & routes</span>
+/src/components    <span class="cm"># React components</span>
+/src/lib           <span class="cm"># utilities, helpers</span>
+/src/api           <span class="cm"># API handlers only</span>
+
+<span class="ck">## Rules</span>
+- TypeScript strict, no <span class="cw">any</span>
+- API calls only in /src/api
+- Run <span class="cv">npm test</span> before marking done</div>
+        </div>
+      </div>
+
+      <!-- Полный -->
+      <div class="prompt-card">
+        <div class="prompt-card-head" onclick="togglePrompt(this)">
+          <div>
+            <div class="prompt-card-label">Полный шаблон с командами</div>
+            <div class="prompt-card-sub">~120 строк — для больших проектов</div>
+          </div>
+          <span class="toggle-icon" style="font-size:16px;color:var(--text3);transition:transform 0.2s">+</span>
+        </div>
+        <div class="prompt-body">
+          <div class="code-block" style="margin-top:14px"><button class="code-copy" onclick="copyCode(this)">copy</button><span class="cm"># MyApp — CLAUDE.md</span>
+
+<span class="ck">## Project</span>
+<span class="cv">Node.js + React</span> SaaS. TypeScript throughout.
+B2B task management. Multi-tenant, Postgres.
+
+<span class="ck">## Setup</span>
+npm install
+cp .env.example .env
+npm run db:migrate
+npm run dev   <span class="cm"># API :4000, UI :3000</span>
+
+<span class="ck">## Testing</span>
+npm test           <span class="cm"># jest, run after changes</span>
+npm run typecheck  <span class="cm"># must pass before done</span>
+
+<span class="ck">## Architecture</span>
+/apps/api/src/routes    <span class="cm"># Express routers</span>
+/apps/api/src/services  <span class="cm"># business logic</span>
+/apps/api/src/db        <span class="cm"># Prisma queries only</span>
+/apps/web/src/features  <span class="cm"># feature modules</span>
+/apps/web/src/api       <span class="cm"># API client calls</span>
+
+<span class="ck">## Code style</span>
+- TypeScript strict, no <span class="cw">any</span>
+- Services return Result&lt;T, Error&gt;, never throw
+- CSS: Tailwind only, no inline styles
+
+<span class="ck">## Do not</span>
+- Modify /prisma/schema.prisma without asking
+- Use console.log — use /lib/logger instead
+- Change auth logic in /middleware/auth.ts
+
+<span class="ck">## When stuck</span>
+- Ask before architectural decisions
+- Stop if tests fail after 2 attempts
+- Show plan if change touches &gt;3 files
+
+<span class="ck">## Commands</span>
+
+### /review
+Check last change for TypeScript errors,
+missing error handling, security issues.
+Report as CRITICAL / IMPORTANT / MINOR.
+
+### /loop [task]
+Break into units, confirm list, process one
+at a time with npm test after each.
+Stop if tests fail. Report every 5 units.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Почему игнорирует -->
+    <div style="margin-top:12px">
+      <div class="prompt-card">
+        <div class="prompt-card-head" onclick="togglePrompt(this)">
+          <div>
+            <div class="prompt-card-label">Почему Claude игнорирует CLAUDE.md</div>
+            <div class="prompt-card-sub">5 частых причин и как исправить</div>
+          </div>
+          <span class="toggle-icon" style="font-size:16px;color:var(--text3);transition:transform 0.2s">+</span>
+        </div>
+        <div class="prompt-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-top:14px">
+            <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px">
+              <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Слишком длинный</div>
+              <div style="font-size:12px;color:var(--text2);line-height:1.5">Больше 200 строк — Claude перестаёт читать внимательно. Разбей на несколько файлов по папкам.</div>
+            </div>
+            <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px">
+              <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Правила без альтернативы</div>
+              <div style="font-size:12px;color:var(--text2);line-height:1.5">«Не используй console.log» — игнорирует. «Не используй console.log — используй /lib/logger» — следует.</div>
+            </div>
+            <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px">
+              <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Нет команды тестирования</div>
+              <div style="font-size:12px;color:var(--text2);line-height:1.5">Без явного «run npm test after changes» Claude не проверяет работу самостоятельно.</div>
+            </div>
+            <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px">
+              <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Абстрактная архитектура</div>
+              <div style="font-size:12px;color:var(--text2);line-height:1.5">«API в отдельном слое» непонятно. «API calls only in /src/api, never in components» — однозначно.</div>
+            </div>
+            <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px">
+              <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Написан заранее «про запас»</div>
+              <div style="font-size:12px;color:var(--text2);line-height:1.5">Добавляй правило только когда Claude реально сделал что-то не так. Не фантазируй заранее.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ АГЕНТЫ ══ -->
+  <section class="section" id="agents">
+    <div class="section-header">
+      <h2 class="section-title">Агенты и суб-агенты</h2>
+      <span class="section-count">Command vs Agent vs Skill</span>
+    </div>
+
+    <div class="cards-grid-2">
+
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-head">
+          <span class="card-badge badge-amber">команды</span>
+          <span class="toggle-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Command — предсказуемый workflow</div>
+          <div class="card-desc">Для повторяющихся задач с известными шагами. Определяешь один раз, запускаешь командой.</div>
+        </div>
+        <div class="card-detail">
+          <div class="card-detail-inner">
+            <p>Используй когда задача всегда делается одинаково: /review, /loop, /deploy. Лучше чем суб-агент для предсказуемых задач — меньше токенов, точнее результат.</p>
+            <div class="code-block"><button class="code-copy" onclick="copyCode(this)">copy</button>## Commands
+
+### /review
+1. Check TypeScript correctness
+2. Find missing error handling
+3. Flag security issues
+Report as CRITICAL / IMPORTANT / MINOR</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-head">
+          <span class="card-badge badge-amber">агенты</span>
+          <span class="toggle-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Узкие суб-агенты</div>
+          <div class="card-desc">Специалист лучше универсала. Один агент — одна конкретная задача.</div>
+        </div>
+        <div class="card-detail">
+          <div class="card-detail-inner">
+            <p>Вместо «QA агент» (слишком широко) создай конкретного специалиста. Чем уже задача — тем точнее результат.</p>
+            <div class="code-block"><button class="code-copy" onclick="copyCode(this)">copy</button><span class="cm"># Плохо — слишком широко</span>
+/agent qa-engineer "Do quality assurance"
+
+<span class="cm"># Хорошо — конкретная задача</span>
+/agent type-checker "Check TypeScript
+  strict mode violations only"
+
+/agent sql-reviewer "Find N+1 queries
+  and missing indexes"</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-head">
+          <span class="card-badge badge-amber">AskUser</span>
+          <span class="toggle-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">AskUserQuestion — интервью</div>
+          <div class="card-desc">Попроси Claude сначала взять у тебя интервью, потом писать код.</div>
+        </div>
+        <div class="card-detail">
+          <div class="card-detail-inner">
+            <p>5 минут на вопросы экономят часы переделок. Claude уточняет требования пока не поймёт задачу полностью — только потом показывает спецификацию и начинает работу.</p>
+            <div class="code-block"><button class="code-copy" onclick="copyCode(this)">copy</button>Before starting, use AskUserQuestion
+to interview me about requirements.
+Ask until you have enough for a complete spec.
+Show me the spec before writing any code.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-head">
+          <span class="card-badge badge-amber">принцип</span>
+          <span class="toggle-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Когда просто Claude Code лучше</div>
+          <div class="card-desc">Для небольших задач — обычный режим лучше сложных workflow.</div>
+        </div>
+        <div class="card-detail">
+          <div class="card-detail-inner">
+            <p>Все эти workflow и агенты нужны только когда задача реально большая и сложная. Для маленьких изменений они только мешают — больше токенов, дольше, менее точно.</p>
+            <p><strong>Правило:</strong> начни с простого. Добавляй сложность только когда столкнулся с реальной проблемой.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ ПРОМПТЫ ══ -->
+  <section class="section" id="prompts">
+    <div class="section-header">
+      <h2 class="section-title">Шаблоны промптов</h2>
+      <span class="section-count">Plan mode — 3 сценария</span>
+    </div>
+
+    <!-- Универсальный -->
+    <div class="prompt-card" style="margin-bottom:10px">
+      <div class="prompt-card-head" onclick="togglePrompt(this)">
+        <div>
+          <div class="prompt-card-label">Универсальный Plan mode</div>
+          <div class="prompt-card-sub">Подходит для любой задачи</div>
+        </div>
+        <span class="toggle-icon" style="font-size:16px;color:var(--text3);transition:transform 0.2s">+</span>
+      </div>
+      <div class="prompt-body">
+        <div class="code-block" style="margin-top:14px"><button class="code-copy" onclick="copyCode(this)">copy</button><span class="ck">## Task</span>
+[Опиши задачу одним абзацем]
+
+<span class="ck">## Plan first, then implement</span>
+Before writing any code:
+1. Analyse the existing codebase
+2. Write a numbered plan with all steps
+3. For each step, specify how to verify it
+4. Wait for my approval before starting
+
+<span class="ck">## Verification method</span>
+After each step, run: <span class="cv">[команда]</span>
+Step is done only when this passes.
+
+<span class="ck">## Constraints</span>
+- Do not modify files outside [папка]
+- Follow existing code style
+- Ask if anything is unclear before starting</div>
+        <div style="margin-top:10px;padding:10px 12px;background:var(--bg);border-radius:var(--r-sm);border:1px solid var(--border)">
+          <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Почему это работает</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.6">«Wait for my approval» — без этого Claude сразу пойдёт писать код. «Verification method» — конкретная команда которую Claude запустит. Без неё он будет угадывать «готово».</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Новая фича -->
+    <div class="prompt-card" style="margin-bottom:10px">
+      <div class="prompt-card-head" onclick="togglePrompt(this)">
+        <div>
+          <div class="prompt-card-label">Новая фича с фазами</div>
+          <div class="prompt-card-sub">Гейты между фазами — не иди дальше пока тест не прошёл</div>
+        </div>
+        <span class="toggle-icon" style="font-size:16px;color:var(--text3);transition:transform 0.2s">+</span>
+      </div>
+      <div class="prompt-body">
+        <div class="code-block" style="margin-top:14px"><button class="code-copy" onclick="copyCode(this)">copy</button><span class="ck">## Feature</span>
+Add user authentication with email + password.
+Store sessions in Redis. Protect /dashboard route.
+
+<span class="ck">## Plan mode</span>
+Think through this completely before any code.
+Write a plan in this format:
+
+Phase 1: [название]
+- Steps: ...
+- Gate: `npm test auth` must pass before Phase 2
+
+Phase 2: [название]
+- Steps: ...
+- Gate: manually test login at localhost:3000/login
+
+Phase 3: [название]
+- Steps: ...
+- Gate: `npm run test:e2e` all green
+
+<span class="ck">## Show me the plan first.</span>
+I will approve before you start Phase 1.</div>
+      </div>
+    </div>
+
+    <!-- Баг-фикс -->
+    <div class="prompt-card" style="margin-bottom:10px">
+      <div class="prompt-card-head" onclick="togglePrompt(this)">
+        <div>
+          <div class="prompt-card-label">Баг-фикс</div>
+          <div class="prompt-card-sub">Диагноз перед лечением — минимальное исправление</div>
+        </div>
+        <span class="toggle-icon" style="font-size:16px;color:var(--text3);transition:transform 0.2s">+</span>
+      </div>
+      <div class="prompt-body">
+        <div class="code-block" style="margin-top:14px"><button class="code-copy" onclick="copyCode(this)">copy</button><span class="ck">## Bug</span>
+Users get logged out after page refresh.
+Happens only in Safari. Works fine in Chrome.
+
+<span class="ck">## Reproduce</span>
+1. Log in at /login
+2. Refresh the page
+3. Expected: stay logged in
+4. Actual: redirected to /login
+
+<span class="ck">## Plan before fixing</span>
+1. Investigate — read relevant auth code
+2. Form a hypothesis about root cause
+3. Write diagnosis as a short summary
+4. Propose the minimal fix (no refactoring)
+5. Tell me the fix before applying it
+
+<span class="ck">## Verification</span>
+Fix is complete when:
+- `npm test` passes
+- Manual test in Safari: login → refresh → logged in</div>
+      </div>
+    </div>
+
+    <!-- /loop промпт -->
+    <div class="prompt-card">
+      <div class="prompt-card-head" onclick="togglePrompt(this)">
+        <div>
+          <div class="prompt-card-label">Loop — итеративная обработка файлов</div>
+          <div class="prompt-card-sub">Например: конвертировать все .js в TypeScript</div>
+        </div>
+        <span class="toggle-icon" style="font-size:16px;color:var(--text3);transition:transform 0.2s">+</span>
+      </div>
+      <div class="prompt-body">
+        <div class="code-block" style="margin-top:14px"><button class="code-copy" onclick="copyCode(this)">copy</button><span class="ck">## Task</span>
+Convert all JavaScript files in /src/components
+to TypeScript.
+
+<span class="ck">## Loop instructions</span>
+Work through this iteratively:
+
+1. List all .js files in /src/components
+2. For each file, one at a time:
+   a. Convert to TypeScript (.ts/.tsx)
+   b. Run: <span class="cv">npx tsc --noEmit</span>
+   c. If passes — move to next file
+   d. If fails — STOP and report error
+
+3. After every 5 files, summarise:
+   "Done: X/Y files. Current: [filename]"
+
+<span class="ck">## Stop conditions</span>
+- TypeScript error you can't fix in 2 attempts
+- File requiring architectural decisions
+- Any test suite failure
+
+<span class="ck">## Do not</span>
+- Change logic, only add types
+- Skip files or mark them "todo"
+- Continue after a stop condition</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══ CROSS-MODEL ══ -->
+  <section class="section" id="cross">
+    <div class="section-header">
+      <h2 class="section-title">Cross-model review</h2>
+      <span class="section-count">Claude Code + GPT-4o / Codex</span>
+    </div>
+
+    <div class="inline-note">
+      <strong>Честно:</strong> готового инструмента нет. Это ручной паттерн — Claude пишет, другая модель проверяет независимо. Ты — связующее звено.
+    </div>
+
+    <div class="flow-row">
+      <div class="flow-box f-claude">
+        <div class="flow-box-title">Claude Code</div>
+        <div class="flow-box-sub">пишет код / план</div>
+      </div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box">
+        <div class="flow-box-title" style="color:var(--text2)">Ты</div>
+        <div class="flow-box-sub">git diff / копируешь</div>
+      </div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box f-codex">
+        <div class="flow-box-title">GPT-4o / Codex</div>
+        <div class="flow-box-sub">независимое ревью</div>
+      </div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box">
+        <div class="flow-box-title" style="color:var(--text2)">Ты</div>
+        <div class="flow-box-sub">возвращаешь фидбек</div>
+      </div>
+    </div>
+
+    <div class="cards-grid-2">
+
+      <!-- Code review prompt -->
+      <div class="prompt-card">
+        <div class="prompt-card-head" onclick="togglePrompt(this)">
+          <div>
+            <div class="prompt-card-label">Промпт для code review</div>
+            <div class="prompt-card-sub">Вставить в ChatGPT / GPT-4o</div>
+          </div>
+          <span class="toggle-icon" style="font-size:16px;color:var(--text3);transition:transform 0.2s">+</span>
+        </div>
+        <div class="prompt-body">
+          <div class="code-block" style="margin-top:14px"><button class="code-copy" onclick="copyCode(this)">copy</button>You are a senior code reviewer.
+Review the following code change critically.
+You have no context about how it was written.
+
+Focus on:
+1. Bugs — logic errors, null/undefined cases
+2. Edge cases — what inputs would break this?
+3. Security — injection, auth bypass, data exposure
+4. Type safety — missing checks, unsafe casts
+5. Performance — N+1 queries, unnecessary renders
+6. Error handling — what happens when things fail?
+
+Format your response as:
+CRITICAL: [will cause bugs or security problems]
+IMPORTANT: [fix before merge]
+MINOR: [style/improvement suggestions]
+LOOKS GOOD: [what is done well]
+
+Do not praise the code unless it deserves it.
+
+--- CODE START ---
+[вставь diff или код файла]
+--- CODE END ---</div>
+        </div>
+      </div>
+
+      <!-- Plan review prompt -->
+      <div class="prompt-card">
+        <div class="prompt-card-head" onclick="togglePrompt(this)">
+          <div>
+            <div class="prompt-card-label">Промпт для ревью плана</div>
+            <div class="prompt-card-sub">Поймать проблему до написания кода</div>
+          </div>
+          <span class="toggle-icon" style="font-size:16px;color:var(--text3);transition:transform 0.2s">+</span>
+        </div>
+        <div class="prompt-body">
+          <div class="code-block" style="margin-top:14px"><button class="code-copy" onclick="copyCode(this)">copy</button>You are a senior architect.
+Review this implementation plan critically.
+Point out what could go wrong before any code.
+
+Look for:
+1. Missing steps — what did the author forget?
+2. Wrong order — steps that should be earlier
+3. Hidden dependencies — things that must exist first
+4. Scalability — will this break at 10x load?
+5. Rollback — can this be safely undone?
+6. Testing gaps — what's hard to test?
+
+Be specific. Vague concerns are not useful.
+
+Format:
+BLOCKERS: [must fix before starting]
+RISKS: [watch carefully during implementation]
+SUGGESTIONS: [optional improvements]
+SOLID: [what's well thought out]
+
+--- PLAN START ---
+[вставь план от Claude Code]
+--- PLAN END ---</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Скрипт -->
+    <div class="prompt-card" style="margin-top:12px">
+      <div class="prompt-card-head" onclick="togglePrompt(this)">
+        <div>
+          <div class="prompt-card-label">Скрипт-мост (Python)</div>
+          <div class="prompt-card-sub">Автоматически берёт git diff и отправляет в OpenAI API</div>
+        </div>
+        <span class="toggle-icon" style="font-size:16px;color:var(--text3);transition:transform 0.2s">+</span>
+      </div>
+      <div class="prompt-body">
+        <div class="code-block" style="margin-top:14px"><button class="code-copy" onclick="copyCode(this)">copy</button><span class="cm">#!/usr/bin/env python3</span>
+<span class="cm"># Сохрани как cross_review.py</span>
+<span class="cm"># pip install openai</span>
+<span class="cm"># Нужен OPENAI_API_KEY в env</span>
+
+import subprocess, openai, sys
+
+def get_diff():
+    result = subprocess.run(
+        ["git", "diff", "HEAD"],
+        capture_output=True, text=True
+    )
+    return result.stdout
+
+def review(diff: str) -> str:
+    client = openai.OpenAI()
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[{
+            "role": "user",
+            "content": f"""You are a senior code reviewer.
+Review this git diff for bugs, security issues,
+and edge cases. Be specific and concise.
+Format: CRITICAL / IMPORTANT / MINOR / LOOKS GOOD
+
+{diff}"""
+        }]
+    )
+    return response.choices[0].message.content
+
+if __name__ == "__main__":
+    diff = get_diff()
+    if not diff.strip():
+        print("No changes to review.")
+        sys.exit(0)
+    print("=== Cross-model review ===")
+    print(review(diff))</div>
+        <div style="margin-top:10px;padding:10px 12px;background:var(--bg);border-radius:var(--r-sm);border:1px solid var(--border)">
+          <div style="font-size:12px;color:var(--text2);line-height:1.6">Запуск: <code style="font-family:var(--font-mono);font-size:11px;background:var(--bg3);padding:1px 6px;border-radius:3px;color:var(--teal)">python cross_review.py</code> после того как Claude Code сделал изменения. Можно добавить как команду /xreview в CLAUDE.md.</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══ COMMUNITY WORKFLOWS ══ -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Community workflows</h2>
+      <span class="section-count">Популярные паттерны</span>
+    </div>
+
+    <div class="cards-grid">
+
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-head">
+          <span class="card-badge badge-coral">workflow</span>
+          <span class="toggle-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">RPI — Research Plan Implement</div>
+          <div class="card-desc">Трёхфазный процесс для сложных фич.</div>
+        </div>
+        <div class="card-detail">
+          <div class="card-detail-inner">
+            <p><strong>Research</strong> — Claude изучает кодовую базу и задаёт вопросы.</p>
+            <p><strong>Plan</strong> — составляет детальный план с гейтами.</p>
+            <p><strong>Implement</strong> — только после твоего одобрения плана.</p>
+            <p>Хорошо для сложных фич где нельзя прыгать сразу в код. Живёт в репозитории <code style="font-family:var(--font-mono);font-size:11px;background:var(--bg);padding:1px 6px;border-radius:3px;color:var(--teal)">shanraisshan/claude-code-best-practice</code>.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-head">
+          <span class="card-badge badge-coral">workflow</span>
+          <span class="toggle-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Ralph Wiggum Loop</div>
+          <div class="card-desc">Полностью автономная работа над большими задачами.</div>
+        </div>
+        <div class="card-detail">
+          <div class="card-detail-inner">
+            <p>Петля без участия человека: делает шаг → проверяет результат → корректирует → повторяет.</p>
+            <p>Полезно для длинных монотонных задач: миграции, рефакторинг по всей базе кода, массовые обновления. Требует очень чётких stop conditions.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-head">
+          <span class="card-badge badge-coral">tools</span>
+          <span class="toggle-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Github Speckit (74K ★)</div>
+          <div class="card-desc">Из спецификаций — код. И обратно.</div>
+        </div>
+        <div class="card-detail">
+          <div class="card-detail-inner">
+            <p>Инструмент для работы со спецификациями. Описываешь что должна делать система — Claude генерирует код. Можно взять существующий код, превратить в спецификации и пересоздать из них — полезно при больших рефакторингах.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-head">
+          <span class="card-badge badge-coral">tools</span>
+          <span class="toggle-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">obra/superpowers (72K ★)</div>
+          <div class="card-desc">Расширения и суперспособности для Claude Code.</div>
+        </div>
+        <div class="card-detail">
+          <div class="card-detail-inner">
+            <p>Набор расширений которые добавляют новые возможности поверх стандартного Claude Code. Много community-contributed инструментов для специфических сценариев.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-head">
+          <span class="card-badge badge-coral">MCP</span>
+          <span class="toggle-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">MCP — дополнительные источники</div>
+          <div class="card-desc">Claude видит логи Chrome, базы данных, внешние сервисы.</div>
+        </div>
+        <div class="card-detail">
+          <div class="card-detail-inner">
+            <p>MCP (Model Context Protocol) подключает внешние источники данных. Например, MCP для Chrome DevTools — Claude видит console.log и ошибки без копирования.</p>
+            <div class="code-block"><button class="code-copy" onclick="copyCode(this)">copy</button><span class="cm"># ~/.claude/config.json</span>
+{
+  "mcpServers": {
+    "chrome": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-puppeteer"]
+    }
+  }
+}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-head">
+          <span class="card-badge badge-coral">отладка</span>
+          <span class="toggle-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Скриншоты при зависании</div>
+          <div class="card-desc">Если застрял — скриншот вместо описания.</div>
+        </div>
+        <div class="card-detail">
+          <div class="card-detail-inner">
+            <p>Если что-то не работает и трудно объяснить словами — сделай скриншот и перетащи в чат. Claude Code умеет работать с изображениями. Особенно полезно для CSS-проблем и ошибок в браузере.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ ЕЖЕДНЕВНЫЕ ПРИВЫЧКИ ══ -->
+  <section class="section" id="habits">
+    <div class="section-header">
+      <h2 class="section-title">Ежедневные привычки</h2>
+      <span class="section-count">Как оставаться актуальным</span>
+    </div>
+
+    <div class="habits-grid">
+      <div class="habit">
+        <div class="habit-title">Обновляй каждый день</div>
+        <div class="habit-body">Команда выпускает несколько обновлений в неделю с новыми фичами и исправлениями.<br><br><code>npm update -g @anthropic-ai/claude-code</code></div>
+      </div>
+      <div class="habit">
+        <div class="habit-title">Читай changelog утром</div>
+        <div class="habit-body">Новые фичи часто меняют лучшие практики. То что работало неделю назад, сегодня можно делать проще или иначе.</div>
+      </div>
+      <div class="habit">
+        <div class="habit-title">r/ClaudeAI и r/ClaudeCode</div>
+        <div class="habit-body">Сообщество делится трюками которые ещё не попали в официальную документацию. Там же обсуждают новые workflow и инструменты.</div>
+      </div>
+      <div class="habit">
+        <div class="habit-title">CLAUDE.md как живой документ</div>
+        <div class="habit-body">Обновляй после каждого раза когда Claude сделал что-то не так. Не заранее — по факту реальных проблем.</div>
+      </div>
+      <div class="habit">
+        <div class="habit-title">Скриншоты вместо описаний</div>
+        <div class="habit-body">Когда застрял — перетащи скриншот. Экономит время на объяснениях и даёт Claude точный контекст.</div>
+      </div>
+      <div class="habit">
+        <div class="habit-title">Фоновый терминал для отладки</div>
+        <div class="habit-body">Запускай сервер как фоновую задачу — Claude видит логи в реальном времени пока ты тестируешь.<br><br><code>npm run dev &amp;</code></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ КЛЮЧЕВЫЕ ВОПРОСЫ ══ -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Ключевые вопросы</h2>
+      <span class="section-count">На миллиард долларов</span>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">?</div>
+        <div class="step-content">
+          <div class="step-title">Что должно быть внутри CLAUDE.md?</div>
+          <div class="step-desc">Project (стек), Setup (команды), Testing (как проверить), Architecture (где что лежит), Do not (явные запреты с альтернативами). Максимум 200 строк. Только то что реально нужно.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">?</div>
+        <div class="step-content">
+          <div class="step-title">Когда использовать command vs agent vs skill?</div>
+          <div class="step-desc">Command — для предсказуемых повторяющихся задач (/review, /loop). Agent — для узкоспециализированных задач с гибкостью. Skill — переиспользуемый блок инструкций. Для маленьких задач — просто обычный Claude Code.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">?</div>
+        <div class="step-content">
+          <div class="step-title">Почему Claude игнорирует CLAUDE.md?</div>
+          <div class="step-desc">Файл слишком длинный, правила размытые, нет команды тестирования, нет альтернатив для запретов, или написан заранее «про запас» вместо по факту реальных проблем.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">?</div>
+        <div class="step-content">
+          <div class="step-title">Можно ли превратить кодовую базу в спецификации и пересоздать код из них?</div>
+          <div class="step-desc">Да, это идея Github Speckit и OpenSpec OPSX. Полезно при больших рефакторингах или миграции на новый стек. Но требует качественных спецификаций — мусор на входе, мусор на выходе.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div style="margin-bottom:8px">
+    Основано на <a href="https://github.com/shanraisshan/claude-code-best-practice" target="_blank">shanraisshan/claude-code-best-practice</a> (22K+ ★)
+  </div>
+  <div>
+    Статичная страница — нет зависимостей, нет сборки. Просто открой в браузере или опубликуй на GitHub Pages.
+  </div>
+</footer>
+
+<script>
+  function toggleCard(card) {
+    const detail = card.querySelector('.card-detail');
+    const icon = card.querySelector('.toggle-icon');
+    if (!detail) return;
+    const isOpen = detail.classList.contains('open');
+    detail.classList.toggle('open', !isOpen);
+    card.classList.toggle('expanded', !isOpen);
+  }
+
+  function togglePrompt(head) {
+    const body = head.nextElementSibling;
+    const icon = head.querySelector('.toggle-icon');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    if (icon) icon.style.transform = isOpen ? '' : 'rotate(45deg)';
+  }
+
+  function copyCode(btn) {
+    const block = btn.parentElement;
+    const text = block.innerText.replace('copy\n', '').replace('Скопировано\n', '');
+    navigator.clipboard.writeText(text.trim()).then(() => {
+      btn.textContent = 'ok';
+      setTimeout(() => btn.textContent = 'copy', 1500);
+    });
+  }
+
+  // Highlight active nav item on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.style.color = '');
+        const active = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+        if (active) active.style.color = 'var(--accent)';
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
